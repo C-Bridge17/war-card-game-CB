@@ -87,13 +87,13 @@ function Game(props) {
       onKeyPress={handleKeypress}
     >
       {!playerOnesHand && !playerTwosHand && (
-        <button onClick={() => dealCards()}>Deal</button>
+        <button id='deal-cards' onClick={() => dealCards()}>Deal</button>
       )}
       {playerOnesHand && playerTwosHand && !winner && (
         <div>
           <p>Player Ones Cards: {playerOnesHand.length}</p>
           <p>Player Twos Cards: {playerTwosHand.length}</p>
-          <button onClick={() => startRound()}>Start Round</button>
+          <button id='start-round' onClick={() => startRound()}>Start Round</button>
 
         </div>
       )

@@ -13,7 +13,7 @@ function App() {
     fetch('/start')
       .then((res) => res.json())
       .then((data) => setStartRound(data.message))
-    if (leaderBoard) setLeaderBoard(false)
+    if (leaderBoard) setLeaderBoard(false);
   }
 
   useEffect(() => {
