@@ -1,6 +1,10 @@
 # War 
-### What is it good for well hopefully to land me a job
 
+# Tech 
+- React.js
+- Express
+- Sequelize
+- postgreSQL
 
 # Setup (for Mac)
 - First Clone Git repo 
@@ -16,3 +20,15 @@
 - now we cd into the frontend folder and npm install once again
 - open up a secound terminal and cd into the backend folder and npm start
 - in the other terminal that should be cd into frontend you can npm start to see the app.
+
+
+# How to sim 
+- Click the play button
+- Click the Deal button
+- Then you can click the start round button and hold enter to sim the round of war. 
+
+# Features I would like to add 
+- I would have loved to have added viewable cards. 
+- A more detailed way to view what is being played and when
+- more testing I tried to crash course my way through some Jest videos for a little base
+- a loser counter to show how many times a player has lost 
