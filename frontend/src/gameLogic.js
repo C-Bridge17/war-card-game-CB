@@ -1,5 +1,4 @@
 const gameLogic = (playerOne, playerTwo) => {
-  console.log(playerOne, playerTwo)
   let cardOne = playerOne[0];
   let cardTwo = playerTwo[0];
 

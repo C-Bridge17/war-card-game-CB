@@ -17,6 +17,14 @@ app.get('/wins', async (req, res) => {
   return res.json(player)
 })
 
+app.put('/wins/:id(\\d+)', async (req, res) => {
+  const player = await Player.findByPk(req.params.id)
+  console.log(player.wins)
+  const numberOfWins = player.wins += 1
+  const update = await player.update({ wins: numberOfWins })
+  return res.json(update)
+})
+
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });

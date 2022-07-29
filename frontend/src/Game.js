@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Deck from "./deck/deck";
 import gameLogic from "./gameLogic";
 
-function Game() {
+function Game(props) {
   const [playerOnesHand, setPlayerOnesHand] = useState(null);
   const [playerTwosHand, setPlayerTwosHand] = useState(null);
   const [winner, setWinner] = useState(null);
@@ -37,15 +37,16 @@ function Game() {
   }
 
   let startRound = (pot = []) => {
-    console.log(playerOnesHand, playerTwosHand)
     let currentPot = []
     if (!playerOnesHand.length) {
       setWinner('Player Two Wins')
+      props.addToLeaderBoard('Player Two')
       return;
     }
 
     if (!playerTwosHand.length) {
       setWinner('Player One Wins')
+      props.addToLeaderBoard('Player One')
       return;
     }
 

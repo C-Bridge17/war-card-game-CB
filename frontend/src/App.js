@@ -4,7 +4,7 @@ import Game from "./Game";
 import "./App.css";
 
 function App() {
-  const [data, setData] = useState(null);
+  const [players, setPlayers] = useState(null);
   const [startRound, setStartRound] = useState(false);
   const [leaderBoard, setLeaderBoard] = useState(false);
 
@@ -16,13 +16,40 @@ function App() {
     if (leaderBoard) setLeaderBoard(false)
   }
 
-
   useEffect(() => {
     fetch("/wins")
       .then((res) => res.json())
-      .then((data) => setData(data));
-    console.log(data)
-  }, []);
+      .then((data) => setPlayers(data));
+  }, [])
+
+
+  let getLeaderboard = () => {
+    setLeaderBoard(true)
+  };
+
+  let addToLeaderBoard = (name) => {
+
+    let winner;
+    let loser;
+
+    if (players[0].name === name) {
+      winner = players[0]
+      loser = players[1]
+    } else {
+      winner = players[1]
+      loser = players[0]
+    }
+
+    fetch(`/wins/${winner.id}`, {
+      method: "PUT",
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      },
+      body: JSON.stringify(winner)
+    })
+      .then((res) => res.json())
+      .then((data) => setPlayers(data));
+  }
 
   return (
     <div>
@@ -33,7 +60,7 @@ function App() {
         </div>
       )}
       {!leaderBoard && (
-        <button onClick={() => setLeaderBoard(true)}>Leaderboard</button>
+        <button onClick={() => getLeaderboard()}>Leaderboard</button>
       )}
       {leaderBoard && (
 
@@ -46,8 +73,8 @@ function App() {
                 <th>loses</th>
               </tr>
             </thead>
-            {data && data.map(player => (
-              <tbody>
+            {players && players.map((player, index) => (
+              <tbody key={index}>
                 <tr>
                   <td>{player.name}</td>
                   <td>{player.wins}</td>
@@ -60,7 +87,7 @@ function App() {
         </div>
       )}
       {startRound && (
-        <Game></Game>
+        <Game addToLeaderBoard={addToLeaderBoard}></Game>
       )}
     </div>
   );
