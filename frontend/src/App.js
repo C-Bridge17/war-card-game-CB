@@ -9,7 +9,7 @@ function App() {
   const [leaderBoard, setLeaderBoard] = useState(false);
 
 
-  let startGame = function () {
+  let getDeck = function () {
     fetch('/start')
       .then((res) => res.json())
       .then((data) => setStartRound(data.message))
@@ -28,7 +28,7 @@ function App() {
       <h1>War</h1>
       {!startRound && (
         <div>
-          <button onClick={() => startGame()}>Start Game</button>
+          <button onClick={() => getDeck()}>Start Game</button>
         </div>
       )}
       {!leaderBoard && (
@@ -37,21 +37,25 @@ function App() {
       {leaderBoard && (
         <div>
           <table>
-            <tr>
-              <th>Player</th>
-              <th>Wins</th>
-              <th>loses</th>
-            </tr>
-            <tr>
-              <td>Red</td>
-              <td>0</td>
-              <td>1</td>
-            </tr>
-            <tr>
-              <td>Blue</td>
-              <td>1</td>
-              <td>0</td>
-            </tr>
+            <thead>
+              <tr>
+                <th>Player</th>
+                <th>Wins</th>
+                <th>loses</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Red</td>
+                <td>0</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>Blue</td>
+                <td>1</td>
+                <td>0</td>
+              </tr>
+            </tbody>
           </table>
           <button onClick={() => setLeaderBoard(false)}>Hide</button>
         </div>
