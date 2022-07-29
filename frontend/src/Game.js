@@ -4,22 +4,9 @@ import Deck from "./deck/deck";
 import gameLogic from "./gameLogic";
 
 function Game() {
-  const [playerOnesCard, setPlayerOnesCard] = useState(null);
-  const [playerTwosCard, setPlayerTwosCard] = useState(null);
-  const [winner, setWinner] = useState(null)
-  const [timer, setTimer] = useState(500)
-
-
-  let playerOnesHand = [];
-  let playerTwosHand = [];
-
-  // dealing cards
-  // array with all of the cards
-  // math.random an index of that array
-  // push into the players hand
-  // splice from array
-  // repeat until the array is empty
-
+  const [playerOnesHand, setPlayerOnesHand] = useState(null);
+  const [playerTwosHand, setPlayerTwosHand] = useState(null);
+  const [winner, setWinner] = useState(null);
 
   let randomCard = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -44,77 +31,80 @@ function Game() {
 
     }
     if (handOne.length == handTwo.length) {
-      playerOnesHand = handOne;
-      playerTwosHand = handTwo;
+      setPlayerOnesHand(handOne);
+      setPlayerTwosHand(handTwo);
     }
   }
 
-  let startGame = (pot = []) => {
-    setTimeout(() => {
-      let currentPot = []
-      if (!playerOnesHand.length) {
-        setWinner('Player Two Wins')
-        return;
-      }
+  let startRound = (pot = []) => {
+    console.log(playerOnesHand, playerTwosHand)
+    let currentPot = []
+    if (!playerOnesHand.length) {
+      setWinner('Player Two Wins')
+      return;
+    }
 
-      if (!playerTwosHand.length) {
-        setWinner('Player One Wins')
-        return;
-      }
+    if (!playerTwosHand.length) {
+      setWinner('Player One Wins')
+      return;
+    }
 
-      let playerOne = playerOnesHand.shift()
-      let playerTwo = playerTwosHand.shift()
+    let playerOne = playerOnesHand.shift()
+    let playerTwo = playerTwosHand.shift()
 
-      let round = gameLogic(playerOne, playerTwo);
+    let round = gameLogic(playerOne, playerTwo);
 
-      if (round['tied']) {
-        let faceDownOne = playerOnesHand.shift()
-        let faceDownTwo = playerTwosHand.shift()
-        currentPot = [...pot, ...round['tied'], faceDownOne, faceDownTwo]
-      }
-      if (round['playerOne']) {
-        console.log('here')
-        playerOnesHand = [...playerOnesHand, ...pot, ...round['playerOne']]
-      }
+    if (round['tied']) {
+      let faceDownOne = playerOnesHand.shift()
+      let faceDownTwo = playerTwosHand.shift()
+      currentPot = [...pot, ...round['tied'], faceDownOne, faceDownTwo]
+      startRound(currentPot)
+    }
+    if (round['playerOne']) {
+      setPlayerOnesHand([...playerOnesHand, ...pot, ...round['playerOne']])
+    }
 
-      if (round['playerTwo']) {
-        playerTwosHand = [...playerTwosHand, ...pot, ...round['playerTwo']]
-      }
-
-      return roundReplayer(currentPot)
-    }, timer)
-
+    if (round['playerTwo']) {
+      setPlayerTwosHand([...playerTwosHand, ...pot, ...round['playerTwo']])
+    }
   }
 
-  let roundReplayer = (currentPot) => {
-    return startGame(currentPot)
+  let restart = () => {
+    setPlayerOnesHand(null)
+    setPlayerTwosHand(null)
+    setWinner(null)
   }
 
+  const handleKeypress = e => {
+    if (e.keyCode === 13) {
+      startRound();
+    }
+  };
 
   return (
-    <div>
-      <button onClick={() => dealCards()}>Deal</button>
-
-      {playerOnesHand && playerTwosHand && (
+    <div
+      onKeyPress={handleKeypress}
+    >
+      {!playerOnesHand && !playerTwosHand && (
+        <button onClick={() => dealCards()}>Deal</button>
+      )}
+      {playerOnesHand && playerTwosHand && !winner && (
         <div>
           <p>Player Ones Cards: {playerOnesHand.length}</p>
           <p>Player Twos Cards: {playerTwosHand.length}</p>
-          <button onClick={() => startGame()}>Start Game</button>
-          {winner}
+          <button onClick={() => startRound()}>Start Round</button>
+
         </div>
       )
       }
+      {winner && (
+        <div>
+          <h2>{winner}</h2>
+          <button onClick={() => restart()}>Restart</button>
+        </div>
+      )}
     </div >
   );
 }
 
 export default Game;
-
-
-/*
-to play the game
-each player places their top card
-compare the two cards if one if higher the player with the higher card gets the card
-if tied place one card face down and one face up repeat last step
-ace is high
-*/
