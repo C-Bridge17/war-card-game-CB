@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/C-Bridge17/war-card-game-CB#readme",
   "dependencies": {
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "pg": "^8.7.3",
+    "sequelize": "^6.21.3",
+    "sequelize-cli": "^6.4.1"
   }
 }

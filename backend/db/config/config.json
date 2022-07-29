@@ -1,0 +1,10 @@
+{
+  "development": {
+    "username": "wargamer",
+    "password": "asdlkfjh1j23123",
+    "database": "wargame_db",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+
+}

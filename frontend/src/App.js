@@ -20,7 +20,8 @@ function App() {
   useEffect(() => {
     fetch("/wins")
       .then((res) => res.json())
-      .then((data) => setData(data.message));
+      .then((data) => setData(data));
+    console.log(data)
   }, []);
 
   return (
@@ -35,6 +36,7 @@ function App() {
         <button onClick={() => setLeaderBoard(true)}>Leaderboard</button>
       )}
       {leaderBoard && (
+
         <div>
           <table>
             <thead>
@@ -44,18 +46,15 @@ function App() {
                 <th>loses</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>Red</td>
-                <td>0</td>
-                <td>1</td>
-              </tr>
-              <tr>
-                <td>Blue</td>
-                <td>1</td>
-                <td>0</td>
-              </tr>
-            </tbody>
+            {data && data.map(player => (
+              <tbody>
+                <tr>
+                  <td>{player.name}</td>
+                  <td>{player.wins}</td>
+                  <td>{player.loses}</td>
+                </tr>
+              </tbody>
+            ))}
           </table>
           <button onClick={() => setLeaderBoard(false)}>Hide</button>
         </div>
