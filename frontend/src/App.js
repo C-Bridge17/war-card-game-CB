@@ -28,7 +28,7 @@ function App() {
       <h1>War</h1>
       {!startRound && (
         <div>
-          <button onClick={() => getDeck()}>Start Game</button>
+          <button onClick={() => getDeck()}>Play</button>
         </div>
       )}
       {!leaderBoard && (

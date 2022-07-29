@@ -4,13 +4,14 @@ import Deck from "./deck/deck";
 import gameLogic from "./gameLogic";
 
 function Game() {
-  const [playerOnesHand, setPlayerOnesHand] = useState(null);
-  const [playerTwosHand, setPlayerTwosHand] = useState(null);
   const [playerOnesCard, setPlayerOnesCard] = useState(null);
   const [playerTwosCard, setPlayerTwosCard] = useState(null);
   const [winner, setWinner] = useState(null)
-  const [timer, setTimer] = useState(Infinity)
+  const [timer, setTimer] = useState(500)
 
+
+  let playerOnesHand = [];
+  let playerTwosHand = [];
 
   // dealing cards
   // array with all of the cards
@@ -43,51 +44,61 @@ function Game() {
 
     }
     if (handOne.length == handTwo.length) {
-      setPlayerOnesHand(handOne)
-      setPlayerTwosHand(handTwo)
+      playerOnesHand = handOne;
+      playerTwosHand = handTwo;
     }
   }
 
   let startGame = (pot = []) => {
+    setTimeout(() => {
+      let currentPot = []
+      if (!playerOnesHand.length) {
+        setWinner('Player Two Wins')
+        return;
+      }
 
-    let currentPot = []
-    console.log(pot.length + playerOnesHand.length + playerTwosHand.length)
-    console.log(playerOnesHand, playerTwosHand)
-    console.log(pot)
-    if (!playerOnesHand.length) { setWinner('Player Two Wins') }
+      if (!playerTwosHand.length) {
+        setWinner('Player One Wins')
+        return;
+      }
 
-    if (!playerTwosHand.length) { setWinner('Player One Wins') }
+      let playerOne = playerOnesHand.shift()
+      let playerTwo = playerTwosHand.shift()
 
-    let playerOne = playerOnesHand.shift()
-    let playerTwo = playerTwosHand.shift()
+      let round = gameLogic(playerOne, playerTwo);
 
-    let round = gameLogic(playerOne, playerTwo);
+      if (round['tied']) {
+        let faceDownOne = playerOnesHand.shift()
+        let faceDownTwo = playerTwosHand.shift()
+        currentPot = [...pot, ...round['tied'], faceDownOne, faceDownTwo]
+      }
+      if (round['playerOne']) {
+        console.log('here')
+        playerOnesHand = [...playerOnesHand, ...pot, ...round['playerOne']]
+      }
 
-    if (round['tied']) {
-      let faceDownOne = playerOnesHand.shift()
-      let faceDownTwo = playerTwosHand.shift()
-      currentPot = [...pot, ...round['tied'], faceDownOne, faceDownTwo]
-      startGame(currentPot);
-    }
-    if (round['playerOne']) {
-      setPlayerOnesHand([...playerOnesHand, ...pot, ...round['playerOne']])
-    }
+      if (round['playerTwo']) {
+        playerTwosHand = [...playerTwosHand, ...pot, ...round['playerTwo']]
+      }
 
-    if (round['playerTwo']) {
-      setPlayerTwosHand([...playerTwosHand, ...pot, ...round['playerTwo']])
-    }
+      return roundReplayer(currentPot)
+    }, timer)
+
+  }
+
+  let roundReplayer = (currentPot) => {
+    return startGame(currentPot)
   }
 
 
   return (
     <div>
-      {!playerOnesHand && !playerTwosHand && !winner && (
-        <button onClick={() => dealCards()}>Deal</button>
-      )}
+      <button onClick={() => dealCards()}>Deal</button>
+
       {playerOnesHand && playerTwosHand && (
         <div>
-          <p>{playerOnesHand}</p>
-          <p>{playerTwosHand}</p>
+          <p>Player Ones Cards: {playerOnesHand.length}</p>
+          <p>Player Twos Cards: {playerTwosHand.length}</p>
           <button onClick={() => startGame()}>Start Game</button>
           {winner}
         </div>
