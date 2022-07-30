@@ -83,12 +83,6 @@ function Game(props) {
     }
   };
 
-  const superSim = ()=>{
-    while(playerOnesHand.length && playerTwosHand.length){
-      startRound()
-    }
-  }
-
   return (
     <div
       onKeyPress={handleKeypress}
@@ -101,7 +95,6 @@ function Game(props) {
           <p>Player Ones Cards: {playerOnesHand.length}</p>
           <p>Player Twos Cards: {playerTwosHand.length}</p>
           <button id='start-round' onClick={() => startRound()}>Start Round</button>
-          <button onClick={()=> superSim()}>Super Sim</button>
 
         </div>
       )
